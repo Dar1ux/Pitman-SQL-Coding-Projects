@@ -174,36 +174,13 @@ LEFT JOIN BOOK_AUTHORS ON BOOKS.BookID = BOOK_AUTHORS.BookID
 
 -- Creating Stored Procedures
 -- A. How many copies of the book titled "The Lost Tribe" are owned by the library branch whose name is "Sharpstown"?
-CREATE PROC uspGetBookCountInBranch @BookTitle nvarchar(50), @BranchName nvarchar(50)
-AS
-SELECT Title, LIBRARY_BRANCH.BranchName, BOOK_COPIES.Number_Of_Copies
-FROM BOOKS
-INNER JOIN BOOK_COPIES ON BOOK_COPIES.BookID = BOOKS.BookID
-INNER JOIN LIBRARY_BRANCH ON LIBRARY_BRANCH.BranchID = BOOK_COPIES.BranchID
-WHERE BOOKS.Title = @BookTitle AND LIBRARY_BRANCH.BranchName = @BranchName
-;
 
 EXEC uspGetBookCountInBranch @BookTitle = 'The Lost Tribe', @BranchName = 'Sharpstown';
 
 -- B. How many copies of the book titled "The Lost Tribe" are owned by each library branch?
-CREATE PROC uspGetBookCountInEachBranch @BookTitle nvarchar(50)
-AS
-SELECT LIBRARY_BRANCH.BranchName, BOOKS.Title, BOOK_COPIES.Number_Of_Copies
-FROM LIBRARY_BRANCH
-LEFT JOIN BOOK_COPIES ON BOOK_COPIES.BranchID = LIBRARY_BRANCH.BranchID
-LEFT JOIN BOOKS ON BOOKS.BookID = BOOK_COPIES.BookID
-WHERE BOOKS.Title = @BookTitle
-;
 
 EXEC uspGetBookCountInEachBranch @BookTitle = 'The Lost Tribe';
 
 -- C. Retrieve the names of all borrowers who do not have any books checked out.
-CREATE PROC uspGetNamesWithoutBookLoans
-AS
-SELECT [Name]
-FROM BORROWER
-LEFT JOIN BOOK_LOANS ON BOOK_LOANS.CardNo = BORROWER.CardNo
-WHERE BOOK_LOANS.CardNo IS NULL
-;
 
 EXEC uspGetNamesWithoutBookLoans;
