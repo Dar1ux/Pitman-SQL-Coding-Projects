@@ -1,0 +1,8 @@
+CREATE PROC uspGetBookCountInBranch @BookTitle nvarchar(50), @BranchName nvarchar(50)
+AS
+SELECT Title, LIBRARY_BRANCH.BranchName, BOOK_COPIES.Number_Of_Copies
+FROM BOOKS
+INNER JOIN BOOK_COPIES ON BOOK_COPIES.BookID = BOOKS.BookID
+INNER JOIN LIBRARY_BRANCH ON LIBRARY_BRANCH.BranchID = BOOK_COPIES.BranchID
+WHERE BOOKS.Title = @BookTitle AND LIBRARY_BRANCH.BranchName = @BranchName
+;
